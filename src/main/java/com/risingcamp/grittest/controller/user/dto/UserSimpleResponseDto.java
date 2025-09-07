@@ -1,4 +1,3 @@
-/*
 package com.risingcamp.grittest.controller.user.dto;
 
 import com.risingcamp.grittest.repository.user.entity.User;
@@ -16,9 +15,8 @@ public class UserSimpleResponseDto {
     public static UserSimpleResponseDto from (User entity){
         return new UserSimpleResponseDto(
                 entity.getNickname(),
-                entity.getName()
-                entity.
+                entity.getName(),
+                entity.getUserType().toString()
         );
     }
 }
-*/

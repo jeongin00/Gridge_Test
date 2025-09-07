@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Entity
 @AllArgsConstructor
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
     @Id

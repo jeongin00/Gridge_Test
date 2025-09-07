@@ -5,13 +5,14 @@ import com.risingcamp.grittest.controller.user.dto.UserSimpleResponseDto;
 import com.risingcamp.grittest.repository.post.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class PostResponseDto {
+public class PostCreateResponseDto {
     private Integer id;
 
     private String content;
@@ -26,17 +27,15 @@ public class PostResponseDto {
     private UserSimpleResponseDto updatedBy;
     */
 
-    private long likeCount;  // 좋아요 수만 가져올거라서 service 에서 처리하기
 
     private List<PostMediaResponseDto> postMedia;
 
-    public static PostResponseDto from(Post entity, long likeCount){
-        return new PostResponseDto(
+    public static PostCreateResponseDto from(Post entity){
+        return new PostCreateResponseDto(
                 entity.getId(),
                 entity.getContent(),
                 entity.getCreatedAt(),
                 UserSimpleResponseDto.from(entity.getCreatedBy()),
-                likeCount,
                 Collections.emptyList()
         );
     }
