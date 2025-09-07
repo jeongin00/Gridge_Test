@@ -1,6 +1,7 @@
 package com.risingcamp.grittest.controller.post;
 
 import com.risingcamp.grittest.controller.post.dto.PostCreateRequestDto;
+import com.risingcamp.grittest.controller.post.dto.PostCreateResponseDto;
 import com.risingcamp.grittest.controller.post.dto.PostListRequestDto;
 import com.risingcamp.grittest.controller.post.dto.PostResponseDto;
 import com.risingcamp.grittest.repository.user.entity.User;
@@ -28,8 +29,8 @@ public class PostController {
 
     @PostMapping("")
     @Operation(summary = "게시글 생성" , description = "로그인 후 게시글 생성")
-    public ResponseEntity<PostResponseDto> create(@RequestBody PostCreateRequestDto reqeust,  @AuthenticationPrincipal User user){
-        PostResponseDto post = postService.save(reqeust);
+    public ResponseEntity<PostCreateResponseDto> create(@RequestBody PostCreateRequestDto reqeust,  @AuthenticationPrincipal User user){
+        PostCreateResponseDto post = postService.save(reqeust, user);
         return ResponseEntity.ok(post);
     }
     @GetMapping("")
