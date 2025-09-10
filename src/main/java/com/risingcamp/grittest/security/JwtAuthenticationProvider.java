@@ -1,5 +1,7 @@
 package com.risingcamp.grittest.security;
 
+import com.risingcamp.grittest.repository.user.UserRepository;
+import com.risingcamp.grittest.repository.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +9,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,8 +25,9 @@ import java.util.Collection;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
-
+    private final UserRepository userRepository;
     public static final String AUTHORITIES_KEY = "roles";
 
     @Value("${jwt.secret}")
@@ -73,7 +77,14 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             log.error(error, illegalArgumentException);
             throw new JwtInvalidException(error, illegalArgumentException);
         }
-        return new JwtAuthenticationToken(claims.getSubject(), getAuthoritiesFromToken(claims));
+
+        String subject = claims.getSubject(); // 유저 ID가 문자열로 저장돼 있음
+        Integer userId = Integer.parseInt(subject);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new JwtInvalidException("토큰 내 사용자 정보가 존재하지 않습니다."));
+
+        return new JwtAuthenticationToken(user, getAuthoritiesFromToken(claims));
     }
 
     @Override

@@ -1,14 +1,12 @@
 package com.risingcamp.grittest.repository.post.entity;
 
-
-import com.risingcamp.grittest.repository.comment.entity.Comment;
-import com.risingcamp.grittest.repository.like.entity.Like;
+import com.risingcamp.grittest.repository.likes.entity.Likes;
 import com.risingcamp.grittest.repository.postImedia.entity.PostMedia;
 import com.risingcamp.grittest.repository.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,16 +29,15 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "updated_by")
     private User updatedBy;  // 관리자가 수정할 수 있으니 따로 분리
-    private LocalDateTime updatedAt;  
+    private LocalDateTime updatedAt;
+
+    private PostStatus postStatus;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Like> likes;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<PostMedia> postMedia;
+    private List<PostMedia> postMedia = new ArrayList<>();
 
     public static Post create(String content, User user){
         return new Post(
@@ -50,9 +47,9 @@ public class Post {
                 LocalDateTime.now(),
                 user,
                 LocalDateTime.now(),
-                Collections.emptyList(),
-                Collections.emptyList(),
-                Collections.emptyList()
+                PostStatus.VISIBLE,
+                new ArrayList<>(),
+                new ArrayList<>()
         );
     }
 

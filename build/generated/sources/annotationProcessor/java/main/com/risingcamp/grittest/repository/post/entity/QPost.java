@@ -22,8 +22,6 @@ public class QPost extends EntityPathBase<Post> {
 
     public static final QPost post = new QPost("post");
 
-    public final ListPath<com.risingcamp.grittest.repository.comment.entity.Comment, com.risingcamp.grittest.repository.comment.entity.QComment> comments = this.<com.risingcamp.grittest.repository.comment.entity.Comment, com.risingcamp.grittest.repository.comment.entity.QComment>createList("comments", com.risingcamp.grittest.repository.comment.entity.Comment.class, com.risingcamp.grittest.repository.comment.entity.QComment.class, PathInits.DIRECT2);
-
     public final StringPath content = createString("content");
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
@@ -32,9 +30,11 @@ public class QPost extends EntityPathBase<Post> {
 
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
-    public final ListPath<com.risingcamp.grittest.repository.like.entity.Like, com.risingcamp.grittest.repository.like.entity.QLike> likes = this.<com.risingcamp.grittest.repository.like.entity.Like, com.risingcamp.grittest.repository.like.entity.QLike>createList("likes", com.risingcamp.grittest.repository.like.entity.Like.class, com.risingcamp.grittest.repository.like.entity.QLike.class, PathInits.DIRECT2);
+    public final ListPath<com.risingcamp.grittest.repository.likes.entity.Likes, com.risingcamp.grittest.repository.likes.entity.QLikes> likes = this.<com.risingcamp.grittest.repository.likes.entity.Likes, com.risingcamp.grittest.repository.likes.entity.QLikes>createList("likes", com.risingcamp.grittest.repository.likes.entity.Likes.class, com.risingcamp.grittest.repository.likes.entity.QLikes.class, PathInits.DIRECT2);
 
     public final ListPath<com.risingcamp.grittest.repository.postImedia.entity.PostMedia, com.risingcamp.grittest.repository.postImedia.entity.QPostMedia> postMedia = this.<com.risingcamp.grittest.repository.postImedia.entity.PostMedia, com.risingcamp.grittest.repository.postImedia.entity.QPostMedia>createList("postMedia", com.risingcamp.grittest.repository.postImedia.entity.PostMedia.class, com.risingcamp.grittest.repository.postImedia.entity.QPostMedia.class, PathInits.DIRECT2);
+
+    public final EnumPath<PostStatus> postStatus = createEnum("postStatus", PostStatus.class);
 
     public final DateTimePath<java.time.LocalDateTime> updatedAt = createDateTime("updatedAt", java.time.LocalDateTime.class);
 

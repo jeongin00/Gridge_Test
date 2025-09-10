@@ -1,9 +1,6 @@
 package com.risingcamp.grittest.controller.post;
 
-import com.risingcamp.grittest.controller.post.dto.PostCreateRequestDto;
-import com.risingcamp.grittest.controller.post.dto.PostCreateResponseDto;
-import com.risingcamp.grittest.controller.post.dto.PostListRequestDto;
-import com.risingcamp.grittest.controller.post.dto.PostResponseDto;
+import com.risingcamp.grittest.controller.post.dto.*;
 import com.risingcamp.grittest.repository.user.entity.User;
 import com.risingcamp.grittest.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,9 +32,20 @@ public class PostController {
     }
     @GetMapping("")
     @Operation(summary = "게시글 목록 조회", description = "pageIndex, size 사용")
-    public ResponseEntity<List<PostResponseDto>> Posts(@Valid PostListRequestDto request){
+    public ResponseEntity<List<PostResponseDto>> Posts(@RequestBody @Valid PostListRequestDto request){
         List<PostResponseDto> posts = postService.getPosts(request);
         return ResponseEntity.ok(posts);
+    }
+
+    @PostMapping("/{postId}/report")
+    @Operation(summary = "게시글 신고", description = "한 번 신고하면 바로 invisiable")
+    public ResponseEntity<String> postReport(
+            @PathVariable Integer postId,
+            @RequestBody PostReportCreateRequestDto request,
+            @AuthenticationPrincipal User user
+    ){
+        postService.postReport(postId, request, user);
+        return ResponseEntity.ok("신고가 완료되었습니다.");
     }
 }
 

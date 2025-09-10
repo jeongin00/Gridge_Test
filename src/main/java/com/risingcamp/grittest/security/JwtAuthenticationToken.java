@@ -1,5 +1,6 @@
 package com.risingcamp.grittest.security;
 
+import com.risingcamp.grittest.repository.user.entity.User;
 import lombok.Getter;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -9,7 +10,7 @@ import java.util.Collection;
 
 @Getter
 public class JwtAuthenticationToken extends AbstractAuthenticationToken{
-        private String principal;
+        private User principal;    // userId 안쓰고 user 쓸거라서 수정 강사님과 다른 방법
         private String credentials;
 
         public String getToken() {
@@ -24,9 +25,9 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken{
         }
 
         // 2. AuthenticationProvider 에서 인증정보 일치여부를 판단한 뒤 최종 JwtAuthenticationToken 생성 (후에 SecurityContextHolder 내 저장할것)
-        public JwtAuthenticationToken(String subject, Collection<? extends GrantedAuthority> authorities) {
+        public JwtAuthenticationToken(User user, Collection<? extends GrantedAuthority> authorities) {
             super(authorities);
-            this.principal = subject;
+            this.principal = user;
             super.setAuthenticated(true);
         }
     }
