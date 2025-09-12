@@ -43,18 +43,19 @@ public class User implements UserDetails {
     @Setter
     private LocalDateTime termsAgreedAt;  // 개인정보 동의 시점
 
-    
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)
     private UserStatus userStatus;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false)
     private UserType userType;
 
     @Override
     public String getUsername() {
-        return this.name;
+        return this.loginId;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return this.userType == UserType.ADMIN ? ADMIN_ROLES : SIMPLE_ROLES;
     }
 
     @Override
@@ -129,6 +130,25 @@ public class User implements UserDetails {
                 UserStatus.ACTIVE,
                 UserType.USER,
                 SIMPLE_ROLES
+        );
+    }
+
+    public static User createAdmin(String loginId, String phone,  String name, String nickname, String password, Boolean termsAgreed){
+        return new User(
+                null,
+                loginId,
+                phone,
+                name,
+                nickname,
+                password,
+                Source.HOMEPAGE,
+                null,
+                LocalDateTime.now(), // 회원가입 시점
+                termsAgreed,
+                LocalDateTime.now(), // termsAgreedAt
+                UserStatus.ACTIVE,
+                UserType.ADMIN,
+                ADMIN_ROLES
         );
     }
 }

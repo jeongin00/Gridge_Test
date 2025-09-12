@@ -32,6 +32,7 @@ public class PostReport {
     @JoinColumn(name = "created_by")
     private User createdBy;
     private LocalDateTime createdAt;
+    private PostReportStatus postReportStatus;
 
     public static PostReport create(Post post, String title, String content, User user){
         return new PostReport(
@@ -40,7 +41,8 @@ public class PostReport {
                 title,
                 content,
                 user,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                PostReportStatus.ACTIVE
         );
     }
 }

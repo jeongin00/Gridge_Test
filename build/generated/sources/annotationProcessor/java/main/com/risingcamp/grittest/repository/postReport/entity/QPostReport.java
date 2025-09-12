@@ -32,6 +32,8 @@ public class QPostReport extends EntityPathBase<PostReport> {
 
     public final com.risingcamp.grittest.repository.post.entity.QPost post;
 
+    public final EnumPath<PostReportStatus> postReportStatus = createEnum("postReportStatus", PostReportStatus.class);
+
     public final StringPath title = createString("title");
 
     public QPostReport(String variable) {

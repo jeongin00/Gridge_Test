@@ -8,9 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -24,12 +22,6 @@ public class PostCreateResponseDto {
     private LocalDateTime createdAt;
     @Schema(description = "작성자")
     private UserSimpleResponseDto createdBy;
-
-    /*
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
-    private UserSimpleResponseDto updatedBy;
-    */
 
     @Schema(description = "미디어응답리스트목록", example = "[\n" +
             "        {\n" +

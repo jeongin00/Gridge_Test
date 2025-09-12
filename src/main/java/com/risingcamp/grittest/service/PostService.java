@@ -82,9 +82,6 @@ public class PostService {
 
         postReportRepository.save(postReport);
 
-        // 일단 한 번 신고하면 바로 숨김처리
-        post.setPostStatus(PostStatus.INVISIBLE);
-
         return PostReportCreateResponseDto.from(postReport);
     }
 }

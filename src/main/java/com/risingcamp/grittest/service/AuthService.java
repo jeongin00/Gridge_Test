@@ -42,7 +42,28 @@ public class AuthService {
                 encodedPassword,
                 request.isTermsAgreed()
         );
+        if(user.getTermsAgreedAt().isBefore(LocalDateTime.now().minusYears(1))){
+            throw new BaseException(HttpStatus.FORBIDDEN,"개인정보 재동의가 필요합니다.");
+        }
+        userRepository.save(user);
+    }
 
+    @Transactional
+    public void adminSignup(SingUpRequestDto request){
+        if(userRepository.existsByLoginId(request.getLoginId())){
+            throw new BaseException(HttpStatus.CONFLICT,"이미 존재하는 아이디입니다.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
+        User user = User.createAdmin(
+                request.getLoginId(),
+                request.getPhone(),
+                request.getName(),
+                request.getNickname(),
+                encodedPassword,
+                request.isTermsAgreed()
+        );
         if(user.getTermsAgreedAt().isBefore(LocalDateTime.now().minusYears(1))){
             throw new BaseException(HttpStatus.FORBIDDEN,"개인정보 재동의가 필요합니다.");
         }

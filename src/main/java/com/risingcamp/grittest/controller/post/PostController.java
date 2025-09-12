@@ -23,11 +23,10 @@ import java.util.List;
 public class PostController {
     PostService postService;
 
-
     @PostMapping("")
     @Operation(summary = "게시글 생성" , description = "로그인 후 게시글 생성")
-    public ResponseEntity<PostCreateResponseDto> create(@RequestBody PostCreateRequestDto reqeust,  @AuthenticationPrincipal User user){
-        PostCreateResponseDto post = postService.save(reqeust, user);
+    public ResponseEntity<PostCreateResponseDto> create(@RequestBody PostCreateRequestDto request,  @AuthenticationPrincipal User user){
+        PostCreateResponseDto post = postService.save(request, user);
         return ResponseEntity.ok(post);
     }
     @GetMapping("")
