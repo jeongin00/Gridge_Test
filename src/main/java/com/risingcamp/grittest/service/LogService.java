@@ -1,6 +1,6 @@
 package com.risingcamp.grittest.service;
 
-import com.risingcamp.grittest.controller.admin.AdminLog.dto.*;
+import com.risingcamp.grittest.controller.admin.log.dto.*;
 import com.risingcamp.grittest.repository.admin.post.PostHistoryRepository;
 import com.risingcamp.grittest.repository.admin.post.entity.PostHistory;
 import com.risingcamp.grittest.repository.admin.postReport.PostReportHistoryRepository;
@@ -18,7 +18,8 @@ public class LogService {
     private final UserHistoryRepository userHistoryRepository;
     private final PostHistoryRepository postHistoryRepository;
     private final PostReportHistoryRepository postReportHistoryRepository;
-    public List<UserHistoryResponseDto> findUsers(UserHistoryRequestDto request){
+
+    public List<UserHistoryResponseDto> findUsers(UserHistoryRequestDto request) {
         List<UserHistory> userHistory = userHistoryRepository.findAll();
 
         return userHistory.stream()
@@ -26,7 +27,7 @@ public class LogService {
                 .toList();
     }
 
-    public List<PostHistoryResponseDto> findPosts(PostHistoryRequestDto request){
+    public List<PostHistoryResponseDto> findPosts(PostHistoryRequestDto request) {
         List<PostHistory> postHistory = postHistoryRepository.findAll();
 
         return postHistory.stream()
@@ -34,10 +35,10 @@ public class LogService {
                 .toList();
     }
 
-    public List<ReportHistoryResponseDto> findReports(ReportHistoryRequestDto request){
+    public List<ReportHistoryResponseDto> findReports(ReportHistoryRequestDto request) {
         List<PostReportHistory> postReportHistory = postReportHistoryRepository.findAll();
 
-        return postReportHistory .stream()
+        return postReportHistory.stream()
                 .map(ReportHistoryResponseDto::from)
                 .toList();
     }

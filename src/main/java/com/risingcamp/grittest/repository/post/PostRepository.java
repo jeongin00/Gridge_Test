@@ -12,5 +12,6 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Integer> {
-    List<Post> findAllByPostStatus(PostStatus postStatus, Pageable pageable);
+    @EntityGraph(attributePaths = {"likes"})
+    Page<Post> findAllByPostStatus(PostStatus status, Pageable pageable);
 }

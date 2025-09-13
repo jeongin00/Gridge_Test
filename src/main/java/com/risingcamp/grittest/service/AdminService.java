@@ -1,16 +1,16 @@
 package com.risingcamp.grittest.service;
 
-import com.risingcamp.grittest.controller.admin.AdminPost.dto.DeletePostRequestDto;
-import com.risingcamp.grittest.controller.admin.AdminPost.dto.SearchPostRequestDto;
-import com.risingcamp.grittest.controller.admin.AdminPost.dto.SearchPostResponseDto;
-import com.risingcamp.grittest.controller.admin.AdminPost.dto.UpdatePostRequestDto;
-import com.risingcamp.grittest.controller.admin.AdminReport.dto.DeletePostReportRequestDto;
-import com.risingcamp.grittest.controller.admin.AdminReport.dto.SearchPostReportRequestDto;
-import com.risingcamp.grittest.controller.admin.AdminReport.dto.SearchPostReportResponseDto;
-import com.risingcamp.grittest.controller.admin.AdminUser.dto.DeleteUserRequestDto;
-import com.risingcamp.grittest.controller.admin.AdminUser.dto.SearchUserRequestDto;
-import com.risingcamp.grittest.controller.admin.AdminUser.dto.SearchUserResponseDto;
-import com.risingcamp.grittest.controller.admin.AdminUser.dto.UpdateUserRequestDto;
+import com.risingcamp.grittest.controller.admin.post.dto.DeletePostRequestDto;
+import com.risingcamp.grittest.controller.admin.post.dto.SearchPostRequestDto;
+import com.risingcamp.grittest.controller.admin.post.dto.SearchPostResponseDto;
+import com.risingcamp.grittest.controller.admin.post.dto.UpdatePostRequestDto;
+import com.risingcamp.grittest.controller.admin.report.dto.DeletePostReportRequestDto;
+import com.risingcamp.grittest.controller.admin.report.dto.SearchPostReportRequestDto;
+import com.risingcamp.grittest.controller.admin.report.dto.SearchPostReportResponseDto;
+import com.risingcamp.grittest.controller.admin.user.dto.DeleteUserRequestDto;
+import com.risingcamp.grittest.controller.admin.user.dto.SearchUserRequestDto;
+import com.risingcamp.grittest.controller.admin.user.dto.SearchUserResponseDto;
+import com.risingcamp.grittest.controller.admin.user.dto.UpdateUserRequestDto;
 import com.risingcamp.grittest.exception.BaseException;
 import com.risingcamp.grittest.repository.admin.post.PostHistoryRepository;
 import com.risingcamp.grittest.repository.admin.post.entity.PostHistory;
@@ -49,21 +49,21 @@ public class AdminService {
     private final PostReportHistoryRepository postReportHistoryRepository;
 
     // 유저 전체 조회
-    public List<SearchUserResponseDto> findUsers(SearchUserRequestDto request){
+    public List<SearchUserResponseDto> findUsers(SearchUserRequestDto request) {
         List<User> users = userRepository.findAll();  // 유저 전체 조회 pagable 사용 불가
 
         Stream<User> stream = users.stream();
 
-        if(request.getNickname() != null){
-            stream = stream.filter(user -> user.getNickname().contains(request.getNickname()));
+        if (request.getNickname() != null) {
+            stream = stream.filter(user -> user.getNickname().equals(request.getNickname()));
         }
-        if(request.getLoginId() != null){
-            stream = stream.filter(user -> user.getLoginId().contains(request.getLoginId()));
+        if (request.getLoginId() != null) {
+            stream = stream.filter(user -> user.getLoginId().equals(request.getLoginId()));
         }
-        if(request.getUserStatus() != null){
+        if (request.getUserStatus() != null) {
             stream = stream.filter(user -> user.getUserStatus().equals(request.getUserStatus()));
         }
-        if(request.getCreatedAt() != null){
+        if (request.getCreatedAt() != null) {
             stream = stream.filter(user -> user.getCreatedAt().toLocalDate().isEqual(request.getCreatedAt().toLocalDate()));  //contains는 LocalDateTime을 담을 수 없음
         }
 
@@ -75,14 +75,14 @@ public class AdminService {
                 .map(SearchUserResponseDto::from)
                 .toList();
     }
-    
+
     // 유저 상세 조회
-    
+
     // 유저 상태 변경
     @Transactional
-    public void update(Integer id, UpdateUserRequestDto request, User adminuser){
+    public void update(Integer id, UpdateUserRequestDto request, User adminuser) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new BaseException(HttpStatus.NOT_FOUND,"데이터베이스 내에 회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(HttpStatus.NOT_FOUND, "데이터베이스 내에 회원이 존재하지 않습니다."));
 
         UserHistory userHistory = UserHistory.create(user.getNickname(),
                 user.getUserStatus(),
@@ -94,12 +94,12 @@ public class AdminService {
 
         user.setUserStatus(UserStatus.BLOCKED);
     }
-    
+
     // 유저 삭제
     @Transactional
-    public void userDelete(Integer id, DeleteUserRequestDto request, User adminuser){
+    public void userDelete(Integer id, DeleteUserRequestDto request, User adminuser) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new BaseException(HttpStatus.NOT_FOUND,"데이터베이스 내에 회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(HttpStatus.NOT_FOUND, "데이터베이스 내에 회원이 존재하지 않습니다."));
 
         UserHistory userHistory = UserHistory.create(user.getNickname(),
                 user.getUserStatus(),
@@ -112,18 +112,18 @@ public class AdminService {
         userRepository.deleteById(id);
     }
 
-    public List<SearchPostResponseDto> findPosts(SearchPostRequestDto request){
+    public List<SearchPostResponseDto> findPosts(SearchPostRequestDto request) {
         List<Post> posts = postRepository.findAll();  // 유저 전체 조회 pagable 사용 불가
 
         Stream<Post> stream = posts.stream();
 
-        if(request.getLoginId() != null){
+        if (request.getLoginId() != null) {
             stream = stream.filter(post -> post.getCreatedBy().getLoginId().contains(request.getLoginId()));
         }
-        if(request.getPostStatus() != null){
+        if (request.getPostStatus() != null) {
             stream = stream.filter(post -> post.getPostStatus().equals(request.getPostStatus()));
         }
-        if(request.getCreatedAt() != null){
+        if (request.getCreatedAt() != null) {
             stream = stream.filter(post -> post.getCreatedAt().toLocalDate().isEqual(request.getCreatedAt().toLocalDate()));  //contains는 LocalDateTime을 담을 수 없음
         }
 
@@ -141,9 +141,9 @@ public class AdminService {
     @Transactional
     public void postStatus(Integer postId,
                            UpdatePostRequestDto request,
-                           @AuthenticationPrincipal User user){
+                           @AuthenticationPrincipal User user) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new BaseException(HttpStatus.NOT_FOUND,"데이터베이스내 포스트가 존재하지않습니다."));
+                .orElseThrow(() -> new BaseException(HttpStatus.NOT_FOUND, "데이터베이스내 포스트가 존재하지않습니다."));
 
         PostHistory postHistory = PostHistory.create(
                 post.getCreatedBy().getNickname(),
@@ -159,9 +159,9 @@ public class AdminService {
 
     // 포스트 삭제
     @Transactional
-    public void postDelete(Integer postId, DeletePostRequestDto request, @AuthenticationPrincipal User user){
+    public void postDelete(Integer postId, DeletePostRequestDto request, @AuthenticationPrincipal User user) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new BaseException(HttpStatus.NOT_FOUND,"데이터베이스내 포스트가 존재하지않습니다."));
+                .orElseThrow(() -> new BaseException(HttpStatus.NOT_FOUND, "데이터베이스내 포스트가 존재하지않습니다."));
 
         PostHistory postHistory = PostHistory.create(
                 post.getCreatedBy().getNickname(),
@@ -176,7 +176,7 @@ public class AdminService {
     }
 
     // 신고 조회
-    public List<SearchPostReportResponseDto> findPostReport(SearchPostReportRequestDto request){
+    public List<SearchPostReportResponseDto> findPostReport(SearchPostReportRequestDto request) {
         List<PostReport> postReports = postReportRepository.findAll();
 
         return postReports.stream()
@@ -189,9 +189,9 @@ public class AdminService {
 
     // 신고 삭제
     @Transactional
-    public void deletePostReport(Integer postReportId, DeletePostReportRequestDto request, User adminuser){
+    public void deletePostReport(Integer postReportId, DeletePostReportRequestDto request, User adminuser) {
         PostReport postReport = postReportRepository.findById(postReportId)
-                .orElseThrow(()-> new BaseException(HttpStatus.NOT_FOUND,"데이터베이스 내에 신고아이디가 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(HttpStatus.NOT_FOUND, "데이터베이스 내에 신고아이디가 존재하지 않습니다."));
 
         PostReportHistory postReportHistory = PostReportHistory.create(postReport.getCreatedBy().getNickname(),
                 postReport.getPostReportStatus(),

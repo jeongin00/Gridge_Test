@@ -11,10 +11,10 @@ import com.risingcamp.grittest.repository.postImedia.PostMediaRepository;
 import com.risingcamp.grittest.repository.postImedia.entity.PostMedia;
 import com.risingcamp.grittest.repository.postReport.PostReportRepository;
 import com.risingcamp.grittest.repository.postReport.entity.PostReport;
-import com.risingcamp.grittest.repository.user.UserRepository;
 import com.risingcamp.grittest.repository.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,9 +33,9 @@ public class PostService {
     private final PostReportRepository postReportRepository;
 
     @Transactional
-    public PostCreateResponseDto save(PostCreateRequestDto request,  @AuthenticationPrincipal User user){
+    public PostCreateResponseDto save(PostCreateRequestDto request, @AuthenticationPrincipal User user) {
         Post post = Post.create(
-            request.getContent(),
+                request.getContent(),
                 user
         );
 
@@ -43,9 +43,9 @@ public class PostService {
 
         // dto 를 entity 로 변환해야함
         List<PostMedia> postMedias = request.getPostMedias()
-                        .stream()
-                                .map(dto->PostMedia.create(dto.getMediaUrl(), dto.getMediaType(), post))
-                                        .toList();
+                .stream()
+                .map(dto -> PostMedia.create(dto.getMediaUrl(), dto.getMediaType(), post))
+                .toList();
 
         postMediaRepository.saveAll(postMedias);
         post.setPostMedia(postMedias);
@@ -53,25 +53,26 @@ public class PostService {
     }
 
     @Transactional
-    public List<PostResponseDto> getPosts(PostListRequestDto request){
+    public List<PostResponseDto> getPosts(PostListRequestDto request) {
         Pageable pageable = PageRequest.of(
                 request.getPageIndex(),
                 request.getSize(),
-                Sort.by(Sort.Direction.DESC,"createdAt")
+                Sort.by(Sort.Direction.DESC, "createdAt")
         );
 
-        List<PostResponseDto> posts = postRepository.findAllByPostStatus(PostStatus.VISIBLE,pageable)
+        Page<Post> posts = postRepository.findAllByPostStatus(PostStatus.VISIBLE, pageable);
+
+        return posts
                 .stream()
-                .map(post -> PostResponseDto.from(post , likesRepository.countByPostId(post.getId())))
+                .map(post -> PostResponseDto.from(post, post.getLikes().size()))
                 .toList();
-        return posts;
     }
 
+
     @Transactional
-    public PostReportCreateResponseDto postReport(Integer postId, PostReportCreateRequestDto request, @AuthenticationPrincipal User user)
-    {
+    public PostReportCreateResponseDto postReport(Integer postId, PostReportCreateRequestDto request, @AuthenticationPrincipal User user) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new BaseException(HttpStatus.NOT_FOUND,"데이터베이스내 포스트가 존재하지않습니다."));
+                .orElseThrow(() -> new BaseException(HttpStatus.NOT_FOUND, "데이터베이스내 포스트가 존재하지않습니다."));
 
         PostReport postReport = PostReport.create(
                 post,
