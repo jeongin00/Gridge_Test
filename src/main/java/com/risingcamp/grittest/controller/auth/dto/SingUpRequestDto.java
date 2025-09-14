@@ -6,12 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
 @Getter
 @Schema(description = "회원가입을 위한 정보들")
 @Setter
 public class SingUpRequestDto {
-    @Schema(description = "유저아이디", example = "h2222q")
+    @Schema(description = "유저아이디", example = "hji123")
     private String loginId;
     @Schema(description = "전화번호", example = "01012345678")
     @NotNull(message = "전화번호를 입력해주세요")

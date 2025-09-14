@@ -17,8 +17,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/adminLog")
-@Tag(name = "adminUser_Controller", description = "관리자의 Log관련 작업들")
+@RequestMapping("api/admin/log")
+@Tag(name = "Admin Log", description = "관리자의 Log관련 작업들")
 public class AdminLogController {
     private final LogService logService;
 

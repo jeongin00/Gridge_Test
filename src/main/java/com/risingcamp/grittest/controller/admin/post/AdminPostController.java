@@ -23,8 +23,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "adminUser_Controller", description = "관리자의 Post관련 작업들")
-@RequestMapping("api/adminPost")
+@Tag(name = "Admin Post", description = "관리자의 Post관련 작업들")
+@RequestMapping("api/admin/post")
 public class AdminPostController {
     private final PostService postService;
     private final AdminService adminService;

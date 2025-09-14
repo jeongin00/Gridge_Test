@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/adminReport")
+@RequestMapping("/api/admin/report")
 @RequiredArgsConstructor
-@Tag(name = "adminUser_Controller", description = "관리자의 ReportPost(신고)관련 작업들")
+@Tag(name = "Admin Report", description = "관리자의 ReportPost(신고)관련 작업들")
 public class AdminReportController {
     private final AdminService adminService;
 

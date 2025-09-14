@@ -1,9 +1,6 @@
 package com.risingcamp.grittest.controller.admin.user;
 
-import com.risingcamp.grittest.controller.admin.user.dto.DeleteUserRequestDto;
-import com.risingcamp.grittest.controller.admin.user.dto.SearchUserRequestDto;
-import com.risingcamp.grittest.controller.admin.user.dto.SearchUserResponseDto;
-import com.risingcamp.grittest.controller.admin.user.dto.UpdateUserRequestDto;
+import com.risingcamp.grittest.controller.admin.user.dto.*;
 import com.risingcamp.grittest.controller.auth.dto.LoginRequestDto;
 import com.risingcamp.grittest.controller.auth.dto.SingUpRequestDto;
 import com.risingcamp.grittest.repository.user.entity.User;
@@ -22,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/adminUser")
+@RequestMapping("/api/admin/user")
 @RequiredArgsConstructor
-@Tag(name = "adminUser_Controller", description = "관리자의 User관련 작업들")
+@Tag(name = "Admin User", description = "관리자의 User관련 작업들")
 public class AdminUserController {
     private final AuthService authService;
     private final AdminService adminService;
@@ -33,7 +30,7 @@ public class AdminUserController {
     //@Secured("ROLE_ADMIN")
     @PostMapping("/signup")
     @Operation(summary = "관리자 회원가입", description = "홈페이지 회원가입만 가능합니다.")
-    public ResponseEntity<String> create(@RequestBody SingUpRequestDto request) {
+    public ResponseEntity<String> create(@RequestBody AdminSingUpRequestDto request) {
         authService.adminSignup(request);
         return ResponseEntity.ok("관리자 회원가입 성공");
     }
@@ -41,8 +38,8 @@ public class AdminUserController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "홈페이지 로그인만 가능합니다.")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto request) {
-        String token = authService.login(request);
+    public ResponseEntity<String> login(@RequestBody AdminLoginRequestDto request) {
+        String token = authService.adminLogin(request);
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + token)
                 .body("관리자 로그인 성공");

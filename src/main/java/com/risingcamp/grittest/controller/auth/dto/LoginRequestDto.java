@@ -12,7 +12,7 @@ public class LoginRequestDto {
     @Schema(description = "로그인 방식", example = "HOMEPAGE")
     @NotNull(message = "로그인 방식을 입력해주세요")
     private Source source; // HOMEPAGE , KAKAO
-    @Schema(description = "유저아이디", example = "hji1234")
+    @Schema(description = "유저아이디", example = "hji123")
     private String loginId;
     @Schema(description = "비밀번호", example = "qwe123")
     @NotNull(message = "비밀번호를 입력해주세요")
