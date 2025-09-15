@@ -30,7 +30,7 @@ public class AdminUserController {
     //@Secured("ROLE_ADMIN")
     @PostMapping("/signup")
     @Operation(summary = "관리자 회원가입", description = "홈페이지 회원가입만 가능합니다.")
-    public ResponseEntity<String> create(@RequestBody AdminSingUpRequestDto request) {
+    public ResponseEntity<String> create(@RequestBody @Valid AdminSingUpRequestDto request) {
         authService.adminSignup(request);
         return ResponseEntity.ok("관리자 회원가입 성공");
     }
@@ -38,7 +38,7 @@ public class AdminUserController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "홈페이지 로그인만 가능합니다.")
-    public ResponseEntity<String> login(@RequestBody AdminLoginRequestDto request) {
+    public ResponseEntity<String> login(@RequestBody @Valid AdminLoginRequestDto request) {
         String token = authService.adminLogin(request);
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + token)

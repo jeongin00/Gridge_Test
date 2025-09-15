@@ -11,7 +11,7 @@ import lombok.Setter;
 public class AdminSingUpRequestDto {
     @Schema(description = "유저아이디", example = "h2222q")
     private String loginId;
-    @Schema(description = "전화번호", example = "01012345678")
+    @Schema(description = "전화번호", example = "01056781234")
     @NotNull(message = "전화번호를 입력해주세요")
     private String phone;
     @Schema(description = "유저이름", example = "황정인")

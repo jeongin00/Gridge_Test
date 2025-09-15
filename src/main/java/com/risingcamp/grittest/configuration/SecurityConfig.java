@@ -56,7 +56,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(request -> request
                 .requestMatchers("/api/auth/**").permitAll()  // 회원가입, 로그인 허용
-                .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/adminUser/signup","/api/adminUser/login").permitAll() // Oauth
+                .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/admin/user/signup", "/api/admin/user/login").permitAll() // Oauth
                 .requestMatchers("/api/**").authenticated()   // 그 외는 JWT 인증 필요
                 .anyRequest().permitAll()                     // 그 외 정적 리소스 등 허용
         );
